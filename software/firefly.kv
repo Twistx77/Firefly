@@ -1,0 +1,137 @@
+#:import hex kivy.utils.get_color_from_hex
+#rgba: hex('#602088')
+#rgba: hex('#358EE1')
+#rgba: hex('#0F122C')
+<Firefly>:	
+	orientation: 'horizontal'
+	colums:2
+	size: root.size
+
+	
+    BoxLayout:
+        orientation: 'vertical'
+        size: root.size
+        padding: 10
+		spacing: 10
+		
+		BoxLayout:
+		    size_hint: (1,0.3)
+		    orientation: 'vertical'
+		    padding: 10
+		    spacing: 10
+		    TextInput:
+			    size_hint: (1,0.8)
+			    id: tiIP
+			    text: "192.168.1.134"
+	        ToggleButton:
+	            id: btnConnected
+			    text: "Connect" 
+			    on_state: root.connect(self.state)  
+			    
+	    BoxLayout:
+	        orientation:'vertical'
+	        BoxLayout:
+                Label:
+				    text: "Temperatura:"
+				Label:
+				    id: lblTemp
+				    text: "20.3ºC"	 
+		    BoxLayout:
+                Label:
+				    text: "Humedad:"				
+			    Label:
+				    id: lblHum
+				    text: "26%"
+				    
+		    BoxLayout:
+		        orientation:'vertical'
+			    BoxLayout:
+			        
+                    Label:
+				        text: "eCO2:"				
+			        Label:
+				        id: lbleCO2
+				        text: "100 ppm"		        
+		    BoxLayout:
+                Label:
+				    text: "TVOC:"				
+			    Label:
+				    id: lblTVOC
+				    text: "1187 ppb"  
+				          
+            
+    BoxLayout:
+		orientation: 'vertical'
+		padding: 10
+		spacing: 10
+		BoxLayout:
+	        orientation: 'vertical'
+	        size_hint: (1,0.1)
+            ToggleButton:
+                
+                id: btnOnOff
+	            text: "Off"
+				on_touch_up: root.setLampState()
+	        
+		BoxLayout:
+	        orientation: 'vertical'
+			padding: 10
+			spacing: 10
+	        disabled:True if btnOnOff.text == 'Off' else False
+            BoxLayout:
+				size_hint: (1,0.1)
+            
+                orientation: 'horizontal'
+				id: blLampControl
+				
+                Label:
+					size_hint: (0.3,0.3)
+	                text: "Power"
+	            Slider:
+					size_hint: (0.7,1)					
+	                id: intensitySlider
+					value:50
+	                min:0
+                    max:100
+                    on_touch_up: root.setColor() 
+			ColorWheel:
+		        size : root.size
+		        id: colorPicker
+		        on_touch_down: root.setColor() 
+			
+			BoxLayout:
+			
+				size_hint: (1,0.4)
+				orientation: 'vertical'
+				padding: 10
+				spacing: 10
+
+				Label:
+			    	text: "Effects"			
+				BoxLayout:
+					orientation: 'horizontal'
+					padding: 10
+					spacing: 10
+					
+					Button:
+						id:  btnNone
+						text: "None" 
+						on_press: root.setEffect(self.text)  						
+					Button:
+					    id:  btnRainbow
+						text: "Rainbow" 
+						on_press: root.setEffect(self.text) 
+					Button:
+					    id:  btnBreathing
+						text: "Breathing" 
+						on_press: root.setEffect(self.text)  
+					Button:
+						id:  btnChaser
+						text: "Chaser" 
+						on_press: root.setEffect(self.text)  
+			
+	   
+	    
+
+
+		
