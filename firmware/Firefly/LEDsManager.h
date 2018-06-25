@@ -8,6 +8,10 @@
 #define DEFAULT_LED_PIN 2
 #define DEFAULT_NUM_LEDS 10
 
+#define MAX_PREDEFINED_COLORS 7
+#define MAX_PREDEFINED_BRIGHTNESS_INDEX 10
+
+
 #define DELAY_EFFECTS 100
 
 #define EFFECT_NONE 0 
@@ -23,19 +27,26 @@ class LEDsManager
    void setColor( uint8_t aR, uint8_t aG, uint8_t aB );
    void setColor( uint32_t aColor );
    void setBrightness( uint8_t aBrightness); 
+   void switchLamp( void );
+   void nextColor( void );
+   void nextBrightness( void );
    void setEffect ( uint8_t aEffect );
-   void runEffect();
+   void runEffect( void );
    
-     
-
  private:
-  uint8_t LEDs_PIN;
+  uint8_t LEDs_PIN;  
+  uint32_t currentColor;
+  uint8_t currentBrightness;
+  uint8_t lampON;
+  uint8_t currentEffect;
+  uint8_t currentColorIndex;
+  uint8_t currentBrightnessIndex; 
   
-  uint8_t currentEffect; 
   void effectRainbow(); 
   void effectBreathing();
   void effectChaser(); 
   uint32_t Wheel(byte WheelPos);
+ 
     
 
 };

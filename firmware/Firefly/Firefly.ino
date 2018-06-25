@@ -10,11 +10,11 @@
 #define SAMPLING_PERIOD 5000
 
 
-//const char* ssid     = "RED_TUTOELECTRO";
-//const char* password = "tutoelectro123";
+const char* ssid     = "RED_TUTOELECTRO";
+const char* password = "tutoelectro123";
 
-const char* ssid     = "FISIO_WF";
-const char* password = "fisfosFUS";
+//const char* ssid     = "FISIO_WF";
+//const char* password = "fisfosFUS";
 const uint16_t port = 8266;
 
 WiFiServer TCPServer(port);
@@ -40,21 +40,20 @@ void runEffects();
 uint32_t currentColor = 0;
 
 Task task_ConnectionStatus(100, TASK_FOREVER, &checkConnectionStatus);
-Task task_GestureHandler(10, TASK_FOREVER, &checkForGestures);
+Task task_GestureHandler(20, TASK_FOREVER, &checkForGestures);
 Task task_LedsManager(100, TASK_FOREVER, &runEffects);
 Task task_SensorManager(SAMPLING_PERIOD, TASK_FOREVER, &sampleSensors);
 
 Scheduler scheduler; 
-  
+   
 void setup() 
 {  
 
   Serial.begin(115200);
   
-  ledsManager.init(30);
-  ledsManager.setColor( 0xFF00FF); 
+  ledsManager.init(30);   
   sensorManager.init();
-  //gestureHandler.init();
+  gestureHandler.init();
   
 
   WiFi.mode(WIFI_STA);
@@ -78,7 +77,7 @@ void setup()
   scheduler.addTask(task_LedsManager);
 
   task_ConnectionStatus.enable();
-  //task_GestureHandler.enable();
+  task_GestureHandler.enable();
   task_SensorManager.enable();
   task_LedsManager.enable(); 
 }

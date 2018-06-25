@@ -1,19 +1,31 @@
 #include "LEDsManager.h"
 
 
-
-
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(DEFAULT_NUM_LEDS, DEFAULT_LED_PIN, NEO_GRB + NEO_KHZ800); 
+
+uint32_t predefinedColors[MAX_PREDEFINED_COLORS] = {  0x000000FF,
+                                                      0x0000FF00,
+                                                      0x00FF0000,
+                                                      0x00FFFF00,
+                                                      0x0000FFFF,
+                                                      0x00FF00FF,
+                                                      0x00FFFFFF
+                                                    };
+                                                    
 
 LEDsManager::LEDsManager( uint8_t aNum_LEDs, uint8_t aLEDs_PIN ) 
 {  
-    LEDs_PIN = aLEDs_PIN;        
+    LEDs_PIN = aLEDs_PIN;     
+    currentColorIndex = 0;
+    currentBrightnessIndex = 0;    
 }
 
 void LEDsManager::init( uint8_t aInitialBrightness)
 {     
     strip.begin();   
-    strip.setBrightness(10);
+    setColor(0xFF00FF);
+    setBrightness(aInitialBrightness);
+    lampON = true;
     strip.show();
 }
 
@@ -26,23 +38,70 @@ void LEDsManager::setColor( uint8_t aR, uint8_t aG, uint8_t aB )
 
 void LEDsManager::setColor( uint32_t aColor )
 {    
+
+
     for(uint16_t i=0; i<strip.numPixels(); i++) {
         strip.setPixelColor(i, aColor);
         strip.show();       
     }
 }
 
+
 void LEDsManager::setBrightness( uint8_t aBrightness )
 {
+
+    
     strip.setBrightness( aBrightness ); 
+    strip.show();
+}
+
+void LEDsManager::switchLamp( void )
+{
+
+  if (lampON)
+  {   
+    currentColor =strip.getPixelColor(0);    
+    setColor(0);     
+    
+  }
+  else 
+  {
+    Serial.println( currentColor);
+    Serial.println(currentBrightness);
+    setColor( currentColor );
+    //setBrightness (currentBrightness);
+  }
+  lampON = !lampON;
+  
+}
+
+
+void LEDsManager::nextColor( void )
+{
+  setColor(predefinedColors[currentColorIndex]);
+    
+  currentColorIndex++;
+  
+  if (currentColorIndex >= MAX_PREDEFINED_COLORS)
+  {
+    currentColorIndex = 0;
+  }  
+}
+
+void LEDsManager::nextBrightness ( void )
+{
+  currentBrightnessIndex++;
+  if (MAX_PREDEFINED_BRIGHTNESS_INDEX >= 10);
+    
+  setBrightness(currentBrightnessIndex*25);
+  
+  
 }
 
 
 void LEDsManager::setEffect(uint8_t aEffect)
 {
   currentEffect = aEffect; 
-
-
 
 }
 void LEDsManager::runEffect()

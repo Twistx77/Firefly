@@ -10,6 +10,7 @@
 
 #define DHT_PIN D6
 #define CCS811_WAKE_PIN D3
+#define CCS811_RESET_PIN D7
 
 class SensorsManager 
 {

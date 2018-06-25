@@ -1,4 +1,5 @@
 #include "GestureHandler.h"
+#include "LEDsManager.h"
 
 
 #include <SparkFun_APDS9960.h>
@@ -7,6 +8,7 @@
 SparkFun_APDS9960 apds = SparkFun_APDS9960();
 
 volatile uint8_t APDS_INT_flag;
+LEDsManager lm;
 
 void APDS9960_ISR() 
 {
@@ -49,12 +51,17 @@ void GestureHandler::init()
 
 void GestureHandler::checkForGestures( void )
 {    
-    if( APDS_INT_flag == 1 ) 
+    /*if( APDS_INT_flag == 1 ) 
     {
         detachInterrupt(0);
         handleGesture();
         APDS_INT_flag = 0;
         attachInterrupt(PinAPDS9960_INT, APDS9960_ISR, FALLING);
+    }*/
+
+    if (digitalRead(PinAPDS9960_INT))
+    {
+      handleGesture();
     }
 }
 
@@ -65,22 +72,25 @@ void GestureHandler::handleGesture( void )
         switch ( apds.readGesture() ) 
         {
           case DIR_UP:
-            Serial.println("UP");
-            break;
-          case DIR_DOWN:
             Serial.println("DOWN");
             break;
+          case DIR_DOWN:
+            Serial.println("UP");
+            break;
           case DIR_LEFT:
-            Serial.println("LEFT");
+            Serial.println("RIGHT");
+            lm.nextColor();
             break;
           case DIR_RIGHT:
-            Serial.println("RIGHT");
+            Serial.println("LEFT");
+            lm.nextBrightness();
             break;
           case DIR_NEAR:
             Serial.println("NEAR");
             break;
           case DIR_FAR:
             Serial.println("FAR");
+            lm.switchLamp();
             break;
           default:
             Serial.println("NONE");

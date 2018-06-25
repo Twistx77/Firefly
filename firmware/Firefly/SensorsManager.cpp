@@ -23,11 +23,16 @@ void SensorsManager::init( void )
     if ( HDC1080_EN )
     {
     }
+
+    pinMode(CCS811_WAKE_PIN, OUTPUT);
+    pinMode(CCS811_RESET_PIN, OUTPUT);
+    digitalWrite(CCS811_WAKE_PIN, HIGH); // Set wake pin high to keep the CCS811 asleep because it is interfering with apds9960
+    digitalWrite(CCS811_WAKE_PIN, LOW);
+    
     
     if ( CCS811_EN )
     {    
-        pinMode(CCS811_WAKE_PIN, OUTPUT);
-        digitalWrite(CCS811_WAKE_PIN, LOW); // Set wake pin low to keep the CCS811 awake
+        
 
         if(!ccs.begin())
         {
